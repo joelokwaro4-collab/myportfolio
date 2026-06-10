@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Happy Birthday | Interactive Celebration</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Inter', sans-serif;
+            color: #f1f1f1;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0f1f;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff6b6b;
+            border-radius: 10px;
+        }
+
+        /* FULL SCREEN HERO VIDEO SECTION (Big video covering almost whole screen) */
+        .hero-video {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.3);
+        }
+
+        .hero-video video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.45);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            backdrop-filter: brightness(0.9);
+        }
+
+        .hero-text {
+            animation: fadeInUp 1.2s ease;
+            padding: 1.5rem 2rem;
+            background: rgba(0,0,0,0.55);
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,200,100,0.5);
+        }
+
+        .hero-text h1 {
+            font-size: clamp(2.5rem, 8vw, 5.5rem);
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FFD166, #FF9F4A, #FF6B6B);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .hero-text p {
+            font-size: 1.3rem;
+            margin-top: 0.8rem;
+            font-weight: 300;
+            color: #fff7e8;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            font-size: 2rem;
+            color: #ffb347;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 2rem;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 2rem 0 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        .section-title span {
+            background: linear-gradient(120deg, #ffb347, #ff6b6b);
+            padding: 0 1.2rem;
+            border-radius: 50px;
+        }
+
+        /* MESSAGE CARD */
+        .message-card {
+            background: rgba(255,255,240,0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 40px;
+            padding: 1.8rem;
+            margin: 2rem 0;
+            text-align: center;
+            border: 1px solid rgba(255,180,100,0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .message-card textarea {
+            width: 100%;
+            background: #1e1e2f;
+            border: 1px solid #ffb347;
+            border-radius: 28px;
+            padding: 1rem;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            margin-top: 0.8rem;
+        }
+        .message-card label {
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* SURPRISE BUTTON */
+        .surprise-btn-container {
+            text-align: center;
+            margin: 2rem 0 1rem;
+        }
+        .surprise-btn {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.4rem;
+            font-weight: bold;
+            border-radius: 60px;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .surprise-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(255,75,43,0.4);
+        }
+
+        /* Photo Grid (5 photos - CUSTOMIZABLE) */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.8rem;
+            margin: 2rem 0;
+        }
+        .photo-card {
+            background: rgba(0,0,0,0.4);
+            border-radius: 28px;
+            overflow: hidden;
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,180,70,0.5);
+            cursor: pointer;
+        }
+        .photo-card:hover {
+            transform: translateY(-8px);
+            border-color: #ffb347;
+        }
+        .photo-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        .photo-card .caption {
+            padding: 0.8rem;
+            text-align: center;
+            background: rgba(0,0,0,0.6);
+            font-weight: 500;
+        }
+
+        /* Videos Section: 8 videos (starting with big featured video) */
+        .featured-video {
+            margin: 1.5rem 0 2.5rem;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 25px 35px -10px black;
+            background: #000;
+            border: 3px solid #ff9a3c;
+        }
+        .featured-video video {
+            width: 100%;
+            max-height: 550px;
+            object-fit: cover;
+            display: block;
+        }
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .video-card {
+            background: #0f0f1c;
+            border-radius: 28px;
+            overflow: hidden;
+            transition: 0.25s;
+            border: 1px solid #2c2c48;
+            cursor: pointer;
+        }
+        .video-card:hover {
+            transform: scale(1.02);
+            border-color: #ffa559;
+        }
+        .video-card video {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            background: #000;
+        }
+        .vid-title {
+            padding: 0.6rem;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            background: rgba(0,0,0,0.5);
+        }
+
+        /* Customizable hint area */
+        .custom-note {
+            background: #ffb34720;
+            border-radius: 30px;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.9rem;
+            color: #aaa;
+            border-top: 1px solid rgba(255,215,150,0.2);
+            margin-top: 2rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(15px); }
+        }
+        @media (max-width: 680px) {
+            .container { padding: 1rem; }
+            .section-title { font-size: 1.8rem; }
+        }
+        button:active { transform: scale(0.96); }
+    </style>
+</head>
+<body>
+
+<!-- BIG FULL SCREEN VIDEO COVER (customizable) -->
+<div class="hero-video">
+    <video id="heroMainVideo" autoplay muted loop playsinline>
+        <!-- Default beautiful birthday clip - you can replace the src with your own video URL -->
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-happy-birthday-party-with-balloons-and-confetti-3982-large.mp4" type="video/mp4">
+        Your browser does not support video.
+    </video>
+    <div class="hero-overlay">
+        <div class="hero-text">
+            <h1>🎂 Happy Birthday! 🎉</h1>
+            <p>Another year brighter, bolder & more beautiful</p>
+        </div>
+    </div>
+    <div class="scroll-down" onclick="document.getElementById('mainContent').scrollIntoView({behavior:'smooth'});">
+        <i class="fas fa-chevron-down"></i>
+    </div>
+</div>
+
+<main id="mainContent">
+    <div class="container">
+        
+        <!-- SMALL MESSAGE SECTION (customizable) -->
+        <div class="message-card">
+            <label><i class="fas fa-heart" style="color:#ff6b6b;"></i> Birthday Wishes <i class="fas fa-star" style="color:#ffd966;"></i></label>
+            <textarea id="birthdayMessageInput" rows="3" placeholder="Write your heartfelt birthday message here... e.g., 'Happy birthday to the most amazing person! May all your dreams come true 🎈'"></textarea>
+            <div style="font-size:0.8rem; margin-top:8px;">✍️ Edit this message — it will be shown with the surprise!</div>
+        </div>
+
+        <!-- SURPRISE BUTTON (flowers + red hearts + birthday message) -->
+        <div class="surprise-btn-container">
+            <button id="surpriseBtn" class="surprise-btn"><i class="fas fa-gift"></i> Click for Surprise! <i class="fas fa-heart"></i></button>
+        </div>
+
+        <!-- PHOTO SECTION: 5 PHOTOS (customizable) -->
+        <div>
+            <div class="section-title"><span>📸 5 Precious Moments</span></div>
+            <div class="photo-grid" id="photoGrid"></div>
+            <div class="custom-note"><i class="fas fa-upload"></i> 💡 To replace photos: edit the 'photoItems' array in the JavaScript (image URLs & captions).</div>
+        </div>
+
+        <!-- VIDEO SECTION: Big Featured Video + 8 videos -->
+        <div class="videos-showcase">
+            <div class="section-title"><span>🎬 Birthday Cinema</span></div>
+            <!-- Big featured video (starts the videos) -->
+            <div class="featured-video" id="featuredVideoContainer">
+                <video id="featuredMainVideo" controls poster="https://picsum.photos/id/20/800/450">
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-happy-girl-blowing-out-candles-on-a-birthday-cake-39774-large.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <!-- 8 Videos Grid -->
+            <h3 style="margin: 1.5rem 0 1rem;"><i class="fas fa-video"></i> 8 Special Clips (Click to play in main player)</h3>
+            <div class="videos-grid" id="videosGrid"></div>
+            <div class="custom-note"><i class="fas fa-pen"></i> ✨ Customize: Change video URLs & titles in the `videosData` array.</div>
+        </div>
+        
+        <footer>
+            <i class="fas fa-birthday-cake"></i> Made with love | Customize images, videos & music
+        </footer>
+    </div>
+</main>
+
+<!-- Hidden Audio for birthday song -->
+<audio id="birthdaySong" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_3c6b6e1a2e.mp3?filename=happy-birthday-ukulele-116643.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    // --------------------------------------------------------------
+    // CUSTOMIZABLE DATA: Replace with your own images & videos
+    // --------------------------------------------------------------
+    // 5 PHOTOS - change image URLs and captions as you like
+    const photoItems = [
+        { src: "https://picsum.photos/id/20/400/300", caption: "🎈 Joyful Celebration" },
+        { src: "https://picsum.photos/id/29/400/300", caption: "🍰 Delicious Cake" },
+        { src: "https://picsum.photos/id/26/400/300", caption: "✨ Sparkling Moments" },
+        { src: "https://picsum.photos/id/64/400/300", caption: "🎁 Gifts & Smiles" },
+        { src: "https://picsum.photos/id/158/400/300", caption: "🌟 Beautiful Memory" }
+    ];
+    
+    // 8 VIDEOS (you can replace src with your own video URLs, even local files or YouTube embed? We use direct video files)
+    // For best results use mp4 URLs. Placeholder videos from sample CDN, but you can change any.
+    const videosData = [
+        { title: "🎈 Happy Dance", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" },
+        { title: "🕯️ Birthday Candles", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFunflies.mp4" },
+        { title: "🎁 Unwrapping Joy", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" },
+        { title: "👯 Party Vibes", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4" },
+        { title: "🍰 Cake Time", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" },
+        { title: "🎶 Dance & Groove", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCar.mp4" },
+        { title: "🎊 Confetti Blast", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4" },
+        { title: "💖 Hugs & Love", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" }
+    ];
+    
+    // Customizable BIG FEATURED VIDEO (the big player at start of videos)
+    const customFeaturedVideoSrc = "https://assets.mixkit.co/videos/preview/mixkit-happy-birthday-party-with-balloons-and-confetti-3982-large.mp4";
+    // Customizable FULL SCREEN HERO VIDEO (background)
+    const customHeroVideoSrc = "https://assets.mixkit.co/videos/preview/mixkit-colorful-birthday-cake-with-candles-39773-large.mp4";
+    
+    // --------------------------------------------------------------
+    // DOM Elements
+    // --------------------------------------------------------------
+    const photoGrid = document.getElementById('photoGrid');
+    const videosGrid = document.getElementById('videosGrid');
+    const featuredVideoElem = document.getElementById('featuredMainVideo');
+    const heroVideoElem = document.getElementById('heroMainVideo');
+    const surpriseButton = document.getElementById('surpriseBtn');
+    const birthdaySong = document.getElementById('birthdaySong');
+    const messageTextarea = document.getElementById('birthdayMessageInput');
+    
+    // Set custom hero & featured videos
+    heroVideoElem.src = customHeroVideoSrc;
+    featuredVideoElem.src = customFeaturedVideoSrc;
+    featuredVideoElem.controls = true;
+    
+    // Build Photo Gallery (5 photos)
+    function buildPhotoGallery() {
+        photoGrid.innerHTML = '';
+        photoItems.forEach(photo => {
+            const card = document.createElement('div');
+            card.className = 'photo-card';
+            card.innerHTML = `
+                <img src="${photo.src}" alt="${photo.caption}" loading="lazy">
+                <div class="caption">${photo.caption}</div>
+            `;
+            // Error handling for broken images
+            const img = card.querySelector('img');
+            img.onerror = () => { img.src = "https://picsum.photos/id/169/400/300"; img.alt = "Birthday memory"; };
+            photoGrid.appendChild(card);
+        });
+    }
+    
+    // Build 8 videos grid
+    function buildVideosGrid() {
+        videosGrid.innerHTML = '';
+        videosData.forEach((video, idx) => {
+            const videoCard = document.createElement('div');
+            videoCard.className = 'video-card';
+            const vidElem = document.createElement('video');
+            vidElem.src = video.src;
+            vidElem.muted = false;
+            vidElem.controls = true;
+            vidElem.preload = 'metadata';
+            vidElem.style.width = '100%';
+            vidElem.style.height = '170px';
+            vidElem.style.objectFit = 'cover';
+            // Click on card changes featured video (big player)
+            videoCard.addEventListener('click', (e) => {
+                if(e.target.tagName === 'VIDEO' && e.target.controls) return;
+                featuredVideoElem.src = video.src;
+                featuredVideoElem.play().catch(err => console.log("autoplay blocked", err));
+                featuredVideoElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'vid-title';
+            titleDiv.innerText = video.title;
+            videoCard.appendChild(vidElem);
+            videoCard.appendChild(titleDiv);
+            videosGrid.appendChild(videoCard);
+        });
+    }
+    
+    // Helper: Play birthday song softly
+    let songPlaying = false;
+    function playBirthdaySong() {
+        if (birthdaySong.paused) {
+            birthdaySong.volume = 0.4;
+            birthdaySong.play().catch(e => console.log("Song autoplay blocked, user interaction needed"));
+        } else {
+            birthdaySong.currentTime = 0;
+            birthdaySong.play();
+        }
+        songPlaying = true;
+    }
+    
+    // SURPRISE FUNCTION: flowers, red hearts, birthday message + confetti
+    function launchSurprise() {
+        // 1. Canvas Confetti: red hearts & flower-like effects
+        canvasConfetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#ff4d4d', '#ff9999', '#ff1a1a'], startVelocity: 20 });
+        canvasConfetti({ particleCount: 80, spread: 120, origin: { y: 0.7, x: 0.2 }, colors: ['#ff3366', '#ff66b2'], startVelocity: 15 });
+        canvasConfetti({ particleCount: 100, spread: 70, origin: { y: 0.5, x: 0.8 }, colors: ['#ff6b6b', '#ffb347'], shapes: ['circle'] });
+        // Flower effect: using confetti with custom flower shape via scalar? but we add additional burst with emoji-like.
+        setTimeout(() => {
+            canvasConfetti({ particleCount: 300, spread: 100, origin: { y: 0.5 }, startVelocity: 25, colors: ['#ff69b4', '#ffa500', '#ff4d4d'], ticks: 200 });
+            canvasConfetti({ particleCount: 60, spread: 55, origin: { y: 0.4, x: 0.5 }, startVelocity: 10, colors: ['#ff1493', '#ffd700'] });
+        }, 150);
+        
+        // 2. Additional floating hearts: dynamic divs (simple)
+        for(let i = 0; i < 40; i++) {
+            const heart = document.createElement('div');
+            heart.innerHTML = '<i class="fas fa-heart" style="color: #ff4d4d; font-size: 24px;"></i>';
+            heart.style.position = 'fixed';
+            heart.style.bottom = '0px';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.zIndex = '9999';
+            heart.style.pointerEvents = 'none';
+            heart.style.animation = 'floatUp 2.5s ease-in forwards';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 2500);
+        }
+        // Flower icons floating
+        for(let i = 0; i < 30; i++) {
+            const flower = document.createElement('div');
+            flower.innerHTML = '🌸';
+            flower.style.position = 'fixed';
+            flower.style.bottom = '-20px';
+            flower.style.left = Math.random() * 100 + '%';
+            flower.style.fontSize = '28px';
+            flower.style.zIndex = '9999';
+            flower.style.pointerEvents = 'none';
+            flower.style.animation = 'floatFlower 3s ease-in forwards';
+            document.body.appendChild(flower);
+            setTimeout(() => flower.remove(), 3000);
+        }
+        
+        // 3. Birthday message popup (using sweet alert style but native)
+        const customMsg = messageTextarea.value.trim();
+        const finalMsg = customMsg !== "" ? customMsg : "Happy Birthday! May your day be filled with joy, laughter and love! 🎂🎈";
+        // Create a floating toast message
+        const toast = document.createElement('div');
+        toast.innerHTML = `<div style="background: linear-gradient(135deg,#ff9a3c,#ff4d4d); border-radius: 50px; padding: 1rem 2rem; color:white; font-weight: bold; font-size:1.2rem; max-width: 90%; text-align:center; box-shadow: 0 10px 20px black;"><i class="fas fa-birthday-cake"></i> ${finalMsg} <i class="fas fa-heart"></i></div>`;
+        toast.style.position = 'fixed';
+        toast.style.bottom = '30%';
+        toast.style.left = '50%';
+        toast.style.transform = 'translateX(-50%)';
+        toast.style.zIndex = '10000';
+        toast.style.animation = 'fadeInUp 0.5s, fadeOut 0.5s 3s forwards';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3500);
+        
+        // 4. Also play birthday song if not playing
+        playBirthdaySong();
+        
+        // Add a little extra: show heart burst animation style
+        const styleSurprise = document.createElement('style');
+        styleSurprise.textContent = `
+            @keyframes floatUp {
+                0% { transform: translateY(0) scale(0.8); opacity: 1; }
+                100% { transform: translateY(-600px) scale(1.2); opacity: 0; }
+            }
+            @keyframes floatFlower {
+                0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+                100% { transform: translateY(-700px) rotate(20deg); opacity: 0; }
+            }
+            @keyframes fadeOut {
+                to { opacity: 0; visibility: hidden; }
+            }
+        `;
+        document.head.appendChild(styleSurprise);
+        setTimeout(() => styleSurprise.remove(), 4000);
+    }
+    
+    // Add animation keyframes if not present
+    if (!document.querySelector('#dynamicKeyframes')) {
+        const keyframeStyle = document.createElement('style');
+        keyframeStyle.id = 'dynamicKeyframes';
+        keyframeStyle.textContent = `
+            @keyframes floatUp {
+                0% { transform: translateY(0) scale(0.6); opacity: 1; }
+                100% { transform: translateY(-800px) scale(1); opacity: 0; }
+            }
+            @keyframes floatFlower {
+                0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+                100% { transform: translateY(-750px) rotate(30deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(keyframeStyle);
+    }
+    
+    // Event listener for surprise button
+    surpriseButton.addEventListener('click', launchSurprise);
+    
+    // Optional: Add a floating music control? To allow user to pause the birthday song.
+    // Create mini music toggle
+    const musicControl = document.createElement('div');
+    musicControl.style.position = 'fixed';
+    musicControl.style.bottom = '20px';
+    musicControl.style.right = '20px';
+    musicControl.style.background = '#ff9a3ccc';
+    musicControl.style.backdropFilter = 'blur(8px)';
+    musicControl.style.borderRadius = '50px';
+    musicControl.style.padding = '10px 15px';
+    musicControl.style.zIndex = '999';
+    musicControl.style.cursor = 'pointer';
+    musicControl.style.fontSize = '1.2rem';
+    musicControl.innerHTML = '<i class="fas fa-music"></i> 🎵';
+    musicControl.title = "Play/Pause Birthday Song";
+    musicControl.addEventListener('click', () => {
+        if (birthdaySong.paused) {
+            birthdaySong.play().catch(e=>{});
+            musicControl.style.background = '#ff9a3ccc';
+        } else {
+            birthdaySong.pause();
+            musicControl.style.background = '#555555cc';
+        }
+    });
+    document.body.appendChild(musicControl);
+    
+    // Initialize all dynamic sections
+    buildPhotoGallery();
+    buildVideosGrid();
+    
+    // Handle video loading errors gracefully
+    featuredVideoElem.addEventListener('error', () => {
+        featuredVideoElem.src = "https://assets.mixkit.co/videos/preview/mixkit-happy-girl-blowing-out-candles-on-a-birthday-cake-39774-large.mp4";
+    });
+    heroVideoElem.addEventListener('error', () => {
+        heroVideoElem.src = "https://assets.mixkit.co/videos/preview/mixkit-happy-birthday-party-with-balloons-and-confetti-3982-large.mp4";
+    });
+    
+    // Preload birthday song hint
+    console.log("🎉 Ready! Customize photos, videos & enjoy the surprise!");
+</script>
+</body>
+</html>

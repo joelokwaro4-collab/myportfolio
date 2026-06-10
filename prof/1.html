@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Alex Morgan | BBIT Portfolio – Business Technology Analyst</title>
+  <!-- Google Fonts + Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: #0a1c2f;
+      scroll-behavior: smooth;
+      line-height: 1.5;
+    }
+
+    /* custom scroll */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e2e8f0;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1F6E8C;
+      border-radius: 20px;
+    }
+
+    /* header / navigation */
+    .site-header {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      border-bottom: 1px solid #e2edf2;
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #0B2B40, #1F6E8C);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 600;
+      color: #1e4663;
+      transition: 0.2s;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover {
+      color: #1F6E8C;
+      transform: translateY(-2px);
+    }
+
+    /* main container */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 2rem;
+    }
+
+    /* sections general */
+    section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 80px;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #0B2B40;
+      border-left: 5px solid #1F6E8C;
+      padding-left: 1rem;
+    }
+
+    /* HOME SECTION (hero style) */
+    .home-content {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      background: linear-gradient(145deg, #ffffff, #f4f9fe);
+      border-radius: 2rem;
+      padding: 2rem 2rem;
+      box-shadow: 0 15px 30px -12px rgba(0,0,0,0.08);
+    }
+
+    .home-text {
+      flex: 2;
+    }
+
+    .home-text .badge {
+      background: #e6f0fa;
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1c5a7a;
+      margin-bottom: 1rem;
+    }
+
+    .home-text h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #0B2B40, #1F6E8C);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .home-text .title {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #2c3e66;
+      margin-bottom: 1rem;
+    }
+
+    .home-text p {
+      color: #334155;
+      margin-bottom: 1.8rem;
+      max-width: 90%;
+    }
+
+    .home-avatar {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .avatar-circle {
+      background: linear-gradient(145deg, #d9e6f2, #c2d6e8);
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1);
+    }
+
+    .avatar-circle i {
+      font-size: 5.5rem;
+      color: #1c4e6f;
+    }
+
+    /* about section */
+    .about-card {
+      background: white;
+      border-radius: 1.8rem;
+      padding: 2rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+      border: 1px solid #eef2f8;
+    }
+    .about-text {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #1e2f3e;
+    }
+
+    /* skills section */
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      margin-top: 1rem;
+    }
+    .skill-category {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.2rem 1.5rem;
+      flex: 1 1 240px;
+      border: 1px solid #e6edf4;
+      transition: 0.2s;
+    }
+    .skill-category h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #0B2B40;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .skill-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .skill-tag {
+      background: #eef3fc;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #1e4a6e;
+    }
+
+    /* projects section */
+    .projects-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    .project-card {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      flex: 1 1 280px;
+      transition: 0.2s;
+      border: 1px solid #e2edf2;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.02);
+    }
+    .project-card:hover {
+      transform: translateY(-6px);
+      border-color: #cae0ed;
+      box-shadow: 0 15px 25px -12px rgba(0,0,0,0.1);
+    }
+    .project-icon {
+      font-size: 2.2rem;
+      color: #1F6E8C;
+      margin-bottom: 1rem;
+    }
+    .project-card h3 {
+      margin-bottom: 0.6rem;
+    }
+    .project-card p {
+      font-size: 0.85rem;
+      color: #475569;
+    }
+
+    /* contact + whatsapp section */
+    .contact-wrapper {
+      background: white;
+      border-radius: 1.8rem;
+      padding: 2rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .contact-info {
+      flex: 1;
+    }
+    .contact-info h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+    .contact-details {
+      margin: 1.2rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .contact-details a {
+      text-decoration: none;
+      color: #1e4663;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+    }
+    .whatsapp-btn {
+      background: #25D366;
+      color: white;
+      padding: 12px 28px;
+      border-radius: 50px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: 0.2s;
+      box-shadow: 0 4px 12px rgba(37,211,102,0.3);
+    }
+    .whatsapp-btn:hover {
+      background: #128C7E;
+      transform: scale(1.02);
+    }
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .social-links a {
+      background: #eef2fa;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #1c5a7a;
+      transition: 0.2s;
+    }
+    .social-links a:hover {
+      background: #1F6E8C;
+      color: white;
+    }
+
+    /* footer */
+    .site-footer {
+      background: #0B2B40;
+      color: #cbdbe6;
+      padding: 2rem 2rem;
+      border-radius: 2rem 2rem 0 0;
+      margin-top: 3rem;
+      text-align: center;
+    }
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    @media (max-width: 800px) {
+      .nav-container {
+        flex-direction: column;
+      }
+      .home-text h1 {
+        font-size: 2rem;
+      }
+      .home-content {
+        flex-direction: column-reverse;
+        text-align: center;
+      }
+      .home-text p {
+        max-width: 100%;
+      }
+      .section-title {
+        font-size: 1.6rem;
+      }
+      .container {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-container">
+    <div class="logo"><i class="fas fa-code-branch"></i> Alex Morgan</div>
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <!-- HOME Section -->
+  <section id="home">
+    <div class="home-content">
+      <div class="home-text">
+        <span class="badge"><i class="fas fa-graduation-cap"></i> Bachelor of Business Information Technology</span>
+        <h1>Alex Morgan</h1>
+        <div class="title">Business-Technology Strategist & Systems Analyst</div>
+        <p>Tech-savvy problem solver bridging business goals and intelligent IT systems. I transform complex requirements into scalable, value-driven solutions. Passionate about data analytics, process automation, and digital transformation.</p>
+        <a href="#contact" class="whatsapp-btn" style="background: #1F6E8C; box-shadow: none;"><i class="fas fa-paper-plane"></i> Let's connect</a>
+      </div>
+      <div class="home-avatar">
+        <div class="avatar-circle">
+          <i class="fas fa-user-astronaut"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT Section -->
+  <section id="about">
+    <div class="section-title">
+      <i class="fas fa-user-alt"></i>
+      <span>About Me</span>
+    </div>
+    <div class="about-card">
+      <div class="about-text">
+        <p>👋 I'm Alex Morgan — a dedicated <strong>Bachelor of Business Information Technology (BBIT)</strong> student with a deep passion for aligning technology with business strategy. I believe that the best IT solutions emerge from understanding both data architecture and human needs. Currently, I'm focused on leveraging systems analysis, business intelligence, and agile project management to help organizations thrive in the digital era.</p>
+        <p style="margin-top: 1rem;">📚 Over the past two years, I have collaborated on multiple cross-functional projects, from designing data dashboards to optimizing internal workflows. My goal is to become a bridge between technical teams and business stakeholders, ensuring that every IT investment delivers measurable ROI and a seamless user experience. When I'm not coding or modeling processes, I mentor junior students and explore emerging cloud technologies.</p>
+        <p style="margin-top: 1rem;">📍 Based in Nairobi / Global remote — open to freelance, internship, and collaborative opportunities.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS Section -->
+  <section id="skills">
+    <div class="section-title">
+      <i class="fas fa-cogs"></i>
+      <span>Technical & Business Skills</span>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-category">
+        <h3><i class="fas fa-chart-line"></i> Business Analysis</h3>
+        <div class="skill-items">
+          <span class="skill-tag">Requirements Elicitation</span>
+          <span class="skill-tag">Process Mapping (BPMN)</span>
+          <span class="skill-tag">Agile & Scrum</span>
+          <span class="skill-tag">User Stories</span>
+          <span class="skill-tag">Stakeholder Management</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h3><i class="fas fa-database"></i> Data & Analytics</h3>
+        <div class="skill-items">
+          <span class="skill-tag">SQL (PostgreSQL, MySQL)</span>
+          <span class="skill-tag">Power BI / Tableau</span>
+          <span class="skill-tag">Python (Pandas)</span>
+          <span class="skill-tag">Excel Advanced</span>
+          <span class="skill-tag">Data Visualization</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <h3><i class="fas fa-laptop-code"></i> IT & Tools</h3>
+        <div class="skill-items">
+          <span class="skill-tag">Jira / Trello</span>
+          <span class="skill-tag">ERP (Odoo/SAP)</span>
+          <span class="skill-tag">Figma / Lucidchart</span>
+          <span class="skill-tag">Git & GitHub</span>
+          <span class="skill-tag">Microsoft 365</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS Section -->
+  <section id="projects">
+    <div class="section-title">
+      <i class="fas fa-diagram-project"></i>
+      <span>Featured Projects</span>
+    </div>
+    <div class="projects-container">
+      <div class="project-card">
+        <div class="project-icon"><i class="fas fa-chart-simple"></i></div>
+        <h3>Sales Insight Dashboard</h3>
+        <p>Built an interactive Power BI dashboard with SQL data pipeline, providing real-time KPI tracking for a retail chain. Improved decision-making efficiency by 30%.</p>
+      </div>
+      <div class="project-card">
+        <div class="project-icon"><i class="fas fa-people-arrows"></i></div>
+        <h3>ERP Process Automation</h3>
+        <p>Led requirements gathering and prototyping for an Odoo-based inventory module, reducing manual data entry time by 40% through workflow automation.</p>
+      </div>
+      <div class="project-card">
+        <div class="project-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+        <h3>Agile CRM Simulator</h3>
+        <p>Collaborated in an agile team to design a customer relationship prototype using low-code tools, user acceptance testing, and sprint documentation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT Section + WHATSAPP BUTTON -->
+  <section id="contact">
+    <div class="section-title">
+      <i class="fas fa-address-card"></i>
+      <span>Let's Talk</span>
+    </div>
+    <div class="contact-wrapper">
+      <div class="contact-info">
+        <h3>Collaborate & Connect</h3>
+        <p>Have a project in mind? Looking for a business-tech analyst or intern? Reach out directly — I'm open to exciting opportunities.</p>
+        <div class="contact-details">
+          <a href="mailto:alex.morgan@bbit.dev"><i class="fas fa-envelope"></i> alex.morgan@bbit.dev</a>
+          <a href="tel:+254712345678"><i class="fas fa-phone-alt"></i> +254 712 345 678</a>
+        </div>
+        <!-- WHATSAPP BUTTON (floating style but inside contact) -->
+        <a href="https://wa.me/254712345678?text=Hello%20Alex%2C%20I%20saw%20your%20BBIT%20portfolio%20and%20I'd%20like%20to%20connect%20about%20a%20potential%20collaboration!" class="whatsapp-btn" target="_blank">
+          <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+        </a>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-github"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      <div style="background: #eef2fa; border-radius: 1.5rem; padding: 1rem; text-align: center; min-width: 160px;">
+        <i class="fas fa-comment-dots" style="font-size: 3rem; color: #1F6E8C;"></i>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">Reply within 24h</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-content">
+    <p><i class="fas fa-code"></i> Alex Morgan — Bachelor of Business Information Technology | Building bridges between business & systems</p>
+    <p style="font-size: 0.8rem;">© 2025 All rights reserved • Designed with <i class="fas fa-heart" style="color: #f47c7c;"></i> for BBIT portfolio</p>
+  </div>
+</footer>
+
+<!-- Smooth scroll & active link highlight (optional vanilla) -->
+<script>
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href').substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // optional active section highlight on scroll (simple visual)
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 100;
+      const sectionHeight = section.clientHeight;
+      if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.style.color = '#1e4663';
+      link.style.fontWeight = '500';
+      if (link.getAttribute('href').substring(1) === current) {
+        link.style.color = '#1F6E8C';
+        link.style.fontWeight = '700';
+      }
+    });
+  });
+</script>
+</body>
+</html> 
